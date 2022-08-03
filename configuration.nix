@@ -56,8 +56,7 @@
   programs.light.enable = true;
 
   services.xserver = {
-    enable = true;
-    layout = "us";
+    enable = true; layout = "us";
     xkbVariant = "colemak";
     libinput.enable = true;
     autoRepeatDelay = 250;
@@ -121,6 +120,10 @@
   # sound.enable = true;
   # hardware.pulseaudio.enable = true;
 
+  # Bluetooth
+  hardware.bluetooth.enable = true;
+  services.blueman.enable = true;
+
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
@@ -152,6 +155,18 @@
     mpv
     git
     libqalculate
+    keepassxc
+    chromium
+    xclip
+    (st.overrideAttrs (oldAttrs: rec {
+      buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
+      patches = [
+        (fetchpatch {
+          url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.5.diff";
+          sha256 = "0mgsklws6jsrngcsy64zmr604qsdlpd5pqsa3pci7j3gn8im4zyw";
+        })
+      ];
+    }))
   ];
 
   programs.adb.enable = true;
