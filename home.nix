@@ -6,7 +6,7 @@
     ./bash.nix
     ./vim.nix
     ./chromium.nix
-    ./firefox.nix
+#    ./firefox.nix
   ];
   home.sessionVariables = {
     EDITOR = "vim";
