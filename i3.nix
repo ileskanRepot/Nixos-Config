@@ -84,7 +84,7 @@ bar {
   mode            hide
   colors {
     background #000000
-    separator #1ABC9C
+    separator #E754E0
     # colorclass       <border> <background> <text>
     inactive_workspace #E754E0  #E754E0     #000000
     focused_workspace  #E754E0  #000000     #E754E0
