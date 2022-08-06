@@ -32,17 +32,16 @@
           if [[ "$IP" != "$(cat /home/ileska/script/IP)" ]] && [[ "$IP" != "" ]];
           then
             echo -e "$IP" > /home/ileska/scripts/IP
+            while ! ping luntti.net -c1;do sleep 1;done
             scp scripts/IP ileska@luntti.net:ileska.luntti.net/koneIP/index.html
           fi
         fi
       ''; }];
       enable = true;  # Easiest to use and most distros use this by default.
       appendNameservers = [ "8.8.8.8" "1.0.0.1" "1.1.1.1" ];
-      wifi.macAddress = "random";
+      wifi.macAddress = "stable";
     };
   };
-  # networking.wireless.enable = true;
-
 
   # Set your time zone.
   time.timeZone = "Europe/Helsinki";
@@ -74,8 +73,8 @@
       enable = true;
       extraPackages = with pkgs; [
         dmenu 
-        polybar
-        i3lock
+        i3status
+        i3lock-color
       ];
     };
   };
@@ -105,6 +104,7 @@
     description = "Ileska";
     extraGroups = [ "networkmanager" "wheel" "adbusers" "video" ];
   };
+
 
   # Configure keymap in X11
   # services.xserver.layout = "us";
@@ -157,7 +157,7 @@
     libqalculate
     keepassxc
     chromium
-    xclip
+    xclip maim
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
