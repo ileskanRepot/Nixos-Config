@@ -1,14 +1,21 @@
+# Example config https://github.com/disassembler/nixos-configurations/blob/master/modules/profiles/i3.nix
 { pkgs, lib, ... }:
-
-{
+let 
+  i3Lock = pkgs.writeScript "i3-lock.sh" ''
+    #!${pkgs.bash}/bin/bash
+    ${pkgs.i3lock-color}/bin/i3lock-color -f \
+      -i ~/Downloads/linu.pic
+  '';
+in {
   xsession.windowManager.i3 = {
     enable = true;
 
     config = rec {
       modifier = "Mod4";
-      bars = [ ];
 
-      window.border = 0;
+      window = {
+        border = 0;
+      };
 
       keybindings = lib.mkOptionDefault {
         "XF86AudioMute" = "exec amixer set Master toggle";
@@ -16,15 +23,16 @@
         "XF86AudioRaiseVolume" = "exec amixer set Master 1%+";
         "XF86MonBrightnessDown" = "exec light -U 10";
         "XF86MonBrightnessUp" = "exec light -A 10";
-        "${modifier}+BackSpace" = "exec ${pkgs.st}/bin/st";
+        "${modifier}+BackSpace" = "exec /run/current-system/sw/bin/st";
         "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
         "${modifier}+Shift+x" = "exec systemctl suspend";
         "${modifier}+Shift+c" = "reload";
-        "${modifier}+minus" = "exec i3lock";
-        "${modifier}+h" = "focus left";
+        # "${modifier}+Escape" = "exec ${i3Lock} && exec firefox";
+        "${modifier}+Escape" = "exec ${i3Lock}";
         "${modifier}+n" = "focus down";
         "${modifier}+e" = "focus up";
         "${modifier}+i" = "focus right";
+        "${modifier}+h" = "focus left";
         "${modifier}+Shift+h" = "move left";
         "${modifier}+Shift+n" = "move down";
         "${modifier}+Shift+e" = "move up";
@@ -34,10 +42,12 @@
         "${modifier}+r" = "exec dmenu_run -sb \"#af00af\" -nb \"#000000\"";
         "${modifier}+q" = "exec firefox";
         "${modifier}+y" = "mode resize";
+        "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
       };
+      bars = [ ];
       startup = [
         {
-          command = "${pkgs.feh}/bin/feh --bg-scale ~/background.png";
+          command = "${pkgs.feh}/bin/feh --bg-scale ~/Downloads/linu.pic";
           always = true;
           notification = false;
         }
@@ -47,6 +57,9 @@
         {
           command = "${pkgs.i3}/bin/i3-msg workspace 1";
         }
+        #{
+        #  command = "";
+        #}
       ];
       modes = {
         resize = {
@@ -63,8 +76,20 @@
         };
       };
     };
-    extraConfig = ''
-      default_border none
+    extraConfig = ''default_border none
+bar {
+  i3bar_command   i3bar -t
+  status_command  i3status
+  position        top
+  mode            hide
+  colors {
+    background #000000
+    separator #1ABC9C
+    # colorclass       <border> <background> <text>
+    inactive_workspace #E754E0  #E754E0     #000000
+    focused_workspace  #E754E0  #000000     #E754E0
+  }
+}
     '';
   };
 }
