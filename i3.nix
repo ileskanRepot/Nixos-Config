@@ -27,7 +27,6 @@ in {
         "${modifier}+Return" = "exec ${pkgs.kitty}/bin/kitty";
         "${modifier}+Shift+x" = "exec systemctl suspend";
         "${modifier}+Shift+c" = "reload";
-        # "${modifier}+Escape" = "exec ${i3Lock} && exec firefox";
         "${modifier}+Escape" = "exec ${i3Lock}";
         "${modifier}+n" = "focus down";
         "${modifier}+e" = "focus up";
@@ -40,8 +39,10 @@ in {
         "${modifier}+f" = "layout toggle split";
         "${modifier}+p" = "exec i3-nagbar -t warning -m 'Do you want to exit i3?' -b 'Yes' 'i3-msg exit'";
         "${modifier}+r" = "exec dmenu_run -sb \"#af00af\" -nb \"#000000\"";
-        "${modifier}+q" = "exec firefox";
+        "${modifier}+q" = "exec librewolf";
         "${modifier}+y" = "mode resize";
+        "${modifier}+Tab" = "workspace back_and_forth";
+        "${modifier}+x" = "[urgent=latest] focus";
         "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
       };
       bars = [ ];
@@ -76,7 +77,8 @@ in {
         };
       };
     };
-    extraConfig = ''default_border none
+    extraConfig = ''
+default_border none
 bar {
   i3bar_command   i3bar -t
   status_command  i3status

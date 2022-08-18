@@ -24,22 +24,26 @@
     # wireless.iwd.enable = true;  # Enables wireless support via wpa_supplicant.
     nameservers = [ "8.8.8.8" "1.0.0.1" "1.1.1.1" ];
     networkmanager = {
-      dispatcherScripts = [{ source = pkgs.writeText "copyIPToLunttiNet" ''
-        #!/usr/bin/env ${pkgs.bash}/bin/bash
-        if [[ "$2" == "dhcp4-change" ]];
-        then
-          IP=$(ip route | head -1 | cut -d\  -f9)
+      dispatcherScripts = [{ 
+        source = pkgs.writeText "copyIPToLunttiNet" ''
+          #!/usr/bin/env ${pkgs.bash}/bin/bash
+          echo "moi0" >>/home/ileska/test 
+          echo "moi1 $(date)" >>/home/ileska/test 
+          while ! ${pkgs.iputils}/bin/ping luntti.net -c1;do sleep 1;done 2>>/home/ileska/test2
+          echo "moi2 $(date)" >>/home/ileska/test 
+          IP=$(ip route | head -1 | cut -d\  -f9) 
+          echo "moi3 $(date)" >>/home/ileska/test 
           if [[ "$IP" != "$(cat /home/ileska/script/IP)" ]] && [[ "$IP" != "" ]];
           then
-            echo -e "$IP" > /home/ileska/scripts/IP
-            while ! ping luntti.net -c1;do sleep 1;done
-            scp scripts/IP ileska@luntti.net:ileska.luntti.net/koneIP/index.html
+            echo -e "$IP" > /home/ileska/scripts/IP 
+            ${pkgs.su}/bin/su ileska -c "${pkgs.openssh}/bin/scp -i /home/ileska/.ssh/id_ed25520 /home/ileska/scripts/IP ileska@luntti.net:ileska.luntti.net/koneIP/index.html"
           fi
-        fi
-      ''; }];
+        ''; 
+        type = "basic";
+        }];
       enable = true;  # Easiest to use and most distros use this by default.
       appendNameservers = [ "8.8.8.8" "1.0.0.1" "1.1.1.1" ];
-      wifi.macAddress = "stable";
+    wifi.macAddress = "stable";
     };
   };
 
@@ -50,42 +54,10 @@
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
-  services.logind.lidSwitch = "ignore";
 
   programs.light.enable = true;
 
-  services.xserver = {
-    enable = true; layout = "us";
-    xkbVariant = "colemak";
-    libinput.enable = true;
-    autoRepeatDelay = 250;
-    autoRepeatInterval = 40;
-    desktopManager = {
-      xterm.enable = false;
-    };
-
-    displayManager = {
-      sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 94 = Escape'";
-      defaultSession = "none+i3";
-    };
-
-    windowManager.i3 = {
-      enable = true;
-      extraPackages = with pkgs; [
-        dmenu 
-        i3status
-        i3lock-color
-      ];
-    };
-  };
-
   security.rtkit.enable = true;
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
 
   # Select internationalisation properties.
   # i18n.defaultLocale = "en_US.UTF-8";
@@ -122,31 +94,20 @@
 
   # Bluetooth
   hardware.bluetooth.enable = true;
-  services.blueman.enable = true;
 
   # Enable touchpad support (enabled default in most desktopManager).
   # services.xserver.libinput.enable = true;
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
-  # users.users.jane = {
-  #   isNormalUser = true;
-  #   extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
-  #   packages = with pkgs; [
-  #     firefox
-  #     thunderbird
-  #   ];
-  # };
-
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     wget
     tmux
     kitty
     i3
     home-manager
-    firefox
+    librewolf
     usbutils
     feh
     htop
@@ -158,6 +119,8 @@
     keepassxc
     chromium
     xclip maim
+    inkscape
+    dunst libnotify
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
@@ -170,7 +133,10 @@
   ];
 
   programs.adb.enable = true;
-  services.picom.enable = true;
+
+  environment.variables.EDITOR = "nvim"; 
+  programs.neovim.enable = true;
+  programs.neovim.viAlias = true;
 
 
 
@@ -183,15 +149,52 @@
   # };
 
   # List services that you want to enable:
+  services = {
+    openssh.enable = true;
+    picom.enable = true;
+    logind.lidSwitch = "ignore";
 
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+    xserver = {
+      enable = true; 
+      layout = "us";
+      xkbVariant = "colemak";
+      libinput.enable = true;
+      autoRepeatDelay = 250;
+      autoRepeatInterval = 40;
+      desktopManager = {
+        xterm.enable = false;
+      };
+
+      displayManager = {
+        sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 94 = Escape'";
+        defaultSession = "none+i3";
+      };
+
+      windowManager.i3 = {
+        enable = true;
+        extraPackages = with pkgs; [
+          dmenu 
+          i3status
+          i3lock-color
+        ];
+      };
+    };
+
+    pipewire = {
+      enable = true;
+      alsa.enable = true;
+      alsa.support32Bit = true;
+      pulse.enable = true;
+    };
+
+    blueman.enable = true;
+  };
 
   # Open ports in the firewall.
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
-  # networking.firewall.enable = false;
+  networking.firewall.enable = false;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
@@ -205,6 +208,4 @@
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "22.05"; # Did you read the comment?
-
 }
-

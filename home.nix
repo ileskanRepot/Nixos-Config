@@ -4,9 +4,11 @@
     ./secret.nix
     ./i3.nix
     ./bash.nix
-    ./vim.nix
+#    ./vim.nix
+    ./nvim.nix
     ./chromium.nix
 #    ./firefox.nix
+    ./dunst.nix
   ];
   home.sessionVariables = {
     EDITOR = "vim";

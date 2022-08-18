@@ -23,6 +23,7 @@
       gc="git commit";
       vimtmp="vim /tmp/$RANDOM";
       open="xdg-open";
+      vim="nvim";
     };
     historyControl = [
       "erasedups"

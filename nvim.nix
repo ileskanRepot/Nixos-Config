@@ -1,14 +1,8 @@
 { config, pkgs, ...}:
 {
-  programs.vim = {
+  programs.neovim = {
     enable = true;
-    settings = {
-      number = true;
-      relativenumber = true;
-      tabstop = 2;
-      shiftwidth = 2;
-      
-    };
+    vimAlias = true;
     extraConfig = ''
       set langmap=dg,ek,fe,gt,il,jy,kn,lu,nj,pr,rs,sd,tf,ui,yo,op,DG,EK,FE,GT,IL,JY,KN,LU,NJ,PR,RS,SD,TF,UI,YO,OP
       nnoremap \ :set nu! rnu!<Return>
@@ -16,7 +10,10 @@
       highlight Search ctermfg=0 ctermbg=13
       highlight NonText ctermfg=5
       set hlsearch
-
     '';
+    withPython3 = true;
+    plugins = with pkgs.vimPlugins; [
+      vim-nix
+    ];
   };
 }
