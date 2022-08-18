@@ -130,7 +130,7 @@ let
     ${pkgs.chromium}/bin/chromium --new-window --app=https://discord.com/app & disown
     ${pkgs.chromium}/bin/chromium --new-window --app=https://web.telegram.org & disown
     ${pkgs.chromium}/bin/chromium --new-window https://music.youtube.com & disown
-
+    ${pkgs.st}/bin/st
   '';
 in {
   xsession.windowManager.i3 = {
