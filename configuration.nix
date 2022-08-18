@@ -14,6 +14,12 @@
       ./hardware-configuration.nix
     ];
 
+  nix.gc = {
+    automatic = true;
+    dates = "weekly";
+    options = "--delete-older-than 14d";
+  };
+
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -121,6 +127,7 @@
     xclip maim
     inkscape
     dunst libnotify
+    usbguard
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
@@ -152,7 +159,12 @@
   services = {
     openssh.enable = true;
     picom.enable = true;
-    logind.lidSwitch = "ignore";
+    logind = {
+      lidSwitch = "ignore";
+      extraConfig = ''
+        HandlePowerKey=ignore
+      '';
+    };
 
     xserver = {
       enable = true; 
@@ -188,6 +200,13 @@
     };
 
     blueman.enable = true;
+
+    usbguard = {
+      enable = true;
+      rules = ''
+        allow id 0951:1666 serial "60A44C426695B2307625AF6E" name "DataTraveler 3.0" hash "G9dYep3+lK68Q3EkjwxaBOXk+YUi7z822jtOfviEgoQ=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o=" via-port "1-3" with-interface 08:06:50 with-connect-type "hotplug"
+      '';
+    };
   };
 
   # Open ports in the firewall.

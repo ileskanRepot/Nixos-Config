@@ -7,7 +7,8 @@ let
     dunstctl set-paused true
     i3-msg "bar mode invisible"
     ${pkgs.i3lock-color}/bin/i3lock-color -n -f \
-      -i ~/Downloads/linu.pic
+      -i ~/Downloads/linu.pic \
+      --pass-power-keys
     i3-msg "bar mode hide"
     [ "$DUNST_STATUS" == "false" ] && dunstctl set-paused false
   '';

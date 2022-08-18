@@ -24,6 +24,9 @@
       vimtmp="vim /tmp/$RANDOM";
       open="xdg-open";
       vim="nvim";
+      listUSB = "sudo usbguard list-devices";
+      allowUSB = "sudo usbguard allow-device $(sudo usbguard list-devices | tail -1 | cut -d' ' -f4)";
+      removeUSB = "sudo usbguard block-device $(sudo usbguard list-devices | tail -1 | cut -d' ' -f4)";
     };
     historyControl = [
       "erasedups"
