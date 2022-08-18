@@ -8,7 +8,7 @@
     ./nvim.nix
     ./chromium.nix
 #    ./firefox.nix
-    ./dunst.nix
+#    ./dunst.nix
   ];
   home.sessionVariables = {
     EDITOR = "vim";

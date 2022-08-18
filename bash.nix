@@ -32,6 +32,7 @@
     ];
     initExtra = ''
       PS1="\[\033[95m\]\W λ\[\033[0m\] "
+      PATH+=:~/.local/bin
       cd() { builtin cd "$@" && echo -en "\033]0;$(pwd | sed "s#$HOME#~#g")\a" && ls ; }
       printf '\033[?1h\033=' >/dev/tty
       export EDITOR=vim

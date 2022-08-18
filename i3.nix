@@ -6,6 +6,132 @@ let
     ${pkgs.i3lock-color}/bin/i3lock-color -f \
       -i ~/Downloads/linu.pic
   '';
+  DcTgJson = pkgs.writeScript "DcTg.json" ''
+{
+  "border": "none",
+  "floating": "auto_off",
+  "layout": "splitv",
+  "marks": [],
+  "percent": 0.5,
+  "type": "con",
+  "nodes": [
+    {
+      "border": "none",
+      "current_border_width": 0,
+      "floating": "auto_off",
+      "geometry": {
+        "height": 1060,
+        "width": 945,
+        "x": 10,
+        "y": 10
+      },
+      "marks": [],
+      "name": "Discord",
+      "percent": 0.5,
+      "swallows": [
+        {
+          "class": "^Chromium\\-browser$",
+          "instance": "^discord\\.com__app$",
+          "machine": "^pahvi$",
+          "title": "^Discord$",
+          "window_role": "^pop\\-up$"
+        }
+      ],
+      "type": "con"
+    },
+    {
+      "border": "none",
+      "current_border_width": 0,
+      "floating": "auto_off",
+      "geometry": {
+        "height": 1060,
+        "width": 945,
+        "x": 10,
+        "y": 10
+      },
+      "marks": [],
+      "name": "Telegram Web",
+      "percent": 0.5,
+      "swallows": [
+        {
+          "class": "^Chromium\\-browser$",
+          "instance": "^web\\.telegram\\.org$",
+          "machine": "^pahvi$",
+          "title": "^Telegram\\ Web$",
+          "window_role": "^pop\\-up$"
+        }
+      ],
+      "type": "con"
+    }
+  ]
+}
+{
+  "border": "none",
+  "floating": "auto_off",
+  "layout": "splitv",
+  "marks": [],
+  "percent": 0.5,
+  "type": "con",
+  "nodes": [
+    {
+      "border": "none",
+      "current_border_width": 0,
+      "floating": "auto_off",
+      "geometry": {
+        "height": 1080,
+        "width": 640,
+        "x": 1280,
+        "y": 0
+      },
+      "marks": [],
+      "name": "YouTube Music - Chromium",
+      "percent": 0.5,
+      "swallows": [
+        {
+          "class": "^Chromium\\-browser$",
+          "instance": "^chromium\\-browser$",
+          "machine": "^pahvi$",
+          "title": "^YouTube\\ Music\\ \\-\\ Chromium$",
+          "window_role": "^browser$"
+        }
+      ],
+      "type": "con"
+    },
+    {
+      "border": "none",
+      "current_border_width": 0,
+      "floating": "auto_off",
+      "geometry": {
+         "height": 340,
+         "width": 564,
+         "x": 0,
+         "y": 0
+      },
+      "marks": [],
+      "name": "st",
+      "percent": 0.5,
+      "swallows": [
+        {
+          "class": "^st\\-256color$",
+          "instance": "^st\\-256color$",
+          "machine": "^pahvi$",
+          "title": "^st$"
+        }
+      ],
+      "type": "con"
+    }
+  ]
+}
+  '';
+  DcTg = pkgs.writeScript "DcTg.sh" ''
+    #!${pkgs.bash}/bin/bash
+    ${pkgs.i3}/bin/i3-msg "workspace DcTg"
+    ${pkgs.i3}/bin/i3-msg "append_layout ${DcTgJson}"
+    ${pkgs.chromium}/bin/chromium --new-window --app=https://discord.com/app & disown
+    ${pkgs.chromium}/bin/chromium --new-window --app=https://web.telegram.org & disown
+    ${pkgs.chromium}/bin/chromium --new-window https://music.youtube.com & disown
+
+  '';
 in {
   xsession.windowManager.i3 = {
     enable = true;
@@ -43,6 +169,8 @@ in {
         "${modifier}+y" = "mode resize";
         "${modifier}+Tab" = "workspace back_and_forth";
         "${modifier}+x" = "[urgent=latest] focus";
+        "${modifier}+Shift+s" = "exec ${DcTg}";
+        "${modifier}+minus" = "workspace DcTg";
         "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
       };
       bars = [ ];
