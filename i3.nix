@@ -177,9 +177,10 @@ in {
         "${modifier}+x" = "[urgent=latest] focus";
         "${modifier}+Shift+s" = "exec ${DcTg}";
         "${modifier}+minus" = "workspace DcTg";
-        "XF86PowerOff" = "exec ${i3Lock}";
         "${modifier}+XF86PowerOff" = "exec systemctl hibernate";
+        "${modifier}+t" = "fullscreen toggle";
         "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
+        "XF86PowerOff" = "exec ${i3Lock}";
       };
       bars = [ ];
       startup = [
