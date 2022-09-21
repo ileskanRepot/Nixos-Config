@@ -8,6 +8,8 @@
   boot.resumeDevice = "/dev/mapper/cryptroot";
   swapDevices = [{device = "/swapfile"; size = 10000;}];
 
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
 
   imports =
     [ # Include the results of the hardware scan.
@@ -33,12 +35,8 @@
       dispatcherScripts = [{ 
         source = pkgs.writeText "copyIPToLunttiNet" ''
           #!/usr/bin/env ${pkgs.bash}/bin/bash
-          echo "moi0" >>/home/ileska/test 
-          echo "moi1 $(date)" >>/home/ileska/test 
           while ! ${pkgs.iputils}/bin/ping luntti.net -c1;do sleep 1;done 2>>/home/ileska/test2
-          echo "moi2 $(date)" >>/home/ileska/test 
           IP=$(ip route | head -1 | cut -d\  -f9) 
-          echo "moi3 $(date)" >>/home/ileska/test 
           if [[ "$IP" != "$(cat /home/ileska/script/IP)" ]] && [[ "$IP" != "" ]];
           then
             echo -e "$IP" > /home/ileska/scripts/IP 
@@ -80,7 +78,7 @@
   users.users.ileska = {
     isNormalUser = true;
     description = "Ileska";
-    extraGroups = [ "networkmanager" "wheel" "adbusers" "video" ];
+    extraGroups = [ "libvirtd" "networkmanager" "wheel" "adbusers" "video" "dialout" ];
   };
 
 
@@ -108,7 +106,8 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-    wget
+    libreoffice
+    wget jq python310Packages.yt-dlp
     tmux
     kitty
     i3
@@ -119,7 +118,7 @@
     htop
     wireshark
     alsa-utils
-    mpv
+    mpv-with-scripts
     git
     libqalculate
     keepassxc
@@ -128,6 +127,10 @@
     inkscape
     dunst libnotify
     usbguard
+    virt-manager
+    toybox
+    xdotool
+    playerctl
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
@@ -205,15 +208,20 @@
       enable = true;
       rules = ''
         allow id 0951:1666 serial "60A44C426695B2307625AF6E" name "DataTraveler 3.0" hash "G9dYep3+lK68Q3EkjwxaBOXk+YUi7z822jtOfviEgoQ=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o=" via-port "1-3" with-interface 08:06:50 with-connect-type "hotplug"
+	allow id 2341:0043 serial "5573132383635121A171" name "" hash "uLEqY4iSESGM/vpI/bijPP41IQAr5wqnrOoAV0IWL68=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o=" via-port "1-3" with-interface { 02:02:01 0a:00:00 } with-connect-type "hotplug"
+
       '';
     };
   };
 
   # Open ports in the firewall.
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
+  networking.firewall.allowedTCPPorts = [ 80 22 400 8000 8080 ];
+  networking.firewall.allowedUDPPorts = [ 80 22 400 8000 8080 ];
   # Or disable the firewall altogether.
-  networking.firewall.enable = false;
+  # networking.firewall.enable = false;
+
+  virtualisation.libvirtd.enable = true;
+  programs.dconf.enable = true;
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you

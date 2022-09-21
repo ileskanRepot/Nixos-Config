@@ -7,9 +7,9 @@ let
     dunstctl set-paused true
     i3-msg "bar mode invisible"
     ${pkgs.i3lock-color}/bin/i3lock-color -n -f \
-      -c 000000 \
+      -c 200020
       --pass-power-keys
-    #  -i ~/Downloads/linu.pic \
+      # -i ~/Downloads/linu.pic \
     i3-msg "bar mode hide"
     [ "$DUNST_STATUS" == "false" ] && dunstctl set-paused false
   '';
@@ -180,13 +180,20 @@ in {
         "${modifier}+minus" = "workspace DcTg";
         "${modifier}+XF86PowerOff" = "exec systemctl hibernate";
         "${modifier}+t" = "fullscreen toggle";
+        "${modifier}+F9" = "exec playerctl previous";
+        "${modifier}+F10" = "exec playerctl play-pause";
+        "${modifier}+F11" = "exec playerctl next";
+        "Control+space" = "exec dunstctl close";
+        "Control+." = "exec dunstctl history-pop";
         "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
         "XF86PowerOff" = "exec ${i3Lock}";
+
       };
+      # Bar is off cause I didn't know how to color my bar in nix. Bar is defined in extraConfig
       bars = [ ];
       startup = [
         {
-          command = "${pkgs.feh}/bin/feh --bg-scale ~/Downloads/linu.pic";
+          command = "${pkgs.feh}/bin/feh --bg-scale ~/Downloads/black.png";
           always = true;
           notification = false;
         }
@@ -196,15 +203,12 @@ in {
         {
           command = "${pkgs.i3}/bin/i3-msg workspace 1";
         }
-        #{
-        #  command = "";
-        #}
       ];
       modes = {
         resize = {
           "h" = "resize shrink width 10 px or 10 ppt";
           "n" = "resize shrink height 10 px or 10 ppt";
-          "e" = "resize grow width 10 px or 10 ppt";
+          "e" = "resize grow height 10 px or 10 ppt";
           "i" = "resize grow width 10 px or 10 ppt";
           "shift+h" = "resize shrink width 1 px or 1 ppt";
           "shift+n" = "resize shrink height 1 px or 1 ppt";

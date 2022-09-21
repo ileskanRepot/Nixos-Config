@@ -10,6 +10,7 @@
 #    ./firefox.nix
 #    ./dunst.nix
     ./htop.nix
+    ./mpv.nix
   ];
   home.sessionVariables = {
     EDITOR = "vim";
