@@ -13,6 +13,10 @@ let
     i3-msg "bar mode hide"
     [ "$DUNST_STATUS" == "false" ] && dunstctl set-paused false
   '';
+  clipQalc = pkgs.writeScript "clipQalc.sh" ''
+    #!${pkgs.bash}/bin/bash
+    qalc -s 'angle 0' -s 'angle degrees' -s 'color false' -s 'decimal comma on' -t "$(xclip -selection c -o | sed 's/bar//g' | sed 's/{/(/g' | sed 's/%pi/π/g' |sed 's/}/\)/g' | sed 's#cdot#*#g' | sed 's#over#/#g' | tr -d " ")" | tr -d "\n" | xclip -selection c -i
+  '';
   DcTgJson = pkgs.writeScript "DcTg.json" ''
 {
   "border": "none",
@@ -183,6 +187,7 @@ in {
         "${modifier}+F9" = "exec playerctl previous";
         "${modifier}+F10" = "exec playerctl play-pause";
         "${modifier}+F11" = "exec playerctl next";
+        "XF86Calculator" = "exec ${clipQalc}";
         "Control+space" = "exec dunstctl close";
         "Control+." = "exec dunstctl history-pop";
         "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
