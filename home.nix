@@ -16,4 +16,13 @@
     EDITOR = "vim";
     NIX_SHELL_PRESERVE_PROMPT=1;
   };
+  xdg.mimeApps = {
+    enable = true;
+    associations.added = {
+      "application/pdf" = ["zathura.desktop"];
+    };
+    defaultApplications = {
+      "application/pdf" = ["zathura.desktop"];
+    };
+  };
 }

@@ -8,7 +8,7 @@ let
     i3-msg "bar mode invisible"
     ${pkgs.i3lock-color}/bin/i3lock-color -n -f \
       -c 000000 \
-      --pass-power-keys \
+      --pass-power-keys
     i3-msg "bar mode hide"
     [ "$DUNST_STATUS" == "false" ] && dunstctl set-paused false
   '';
@@ -16,8 +16,7 @@ let
     #!${pkgs.bash}/bin/bash
     qalc -s 'angle 0' -s 'angle degrees' -s 'color false' -s 'decimal comma on' -t "$(xclip -selection c -o | sed 's/bar//g' | sed 's/{/(/g' | sed 's/%pi/π/g' |sed 's/}/\)/g' | sed 's#cdot#*#g' | sed 's#over#/#g' | tr -d " ")" | tr -d "\n" | xclip -selection c -i
   '';
-  DcTgJson = pkgs.writeScript "DcTg.json" ''
-{
+  DcTgJson = pkgs.writeScript "DcTg.json" '' {
   "border": "none",
   "floating": "auto_off",
   "layout": "splitv",
@@ -142,6 +141,8 @@ let
     ${pkgs.chromium}/bin/chromium --new-window https://music.youtube.com & disown
     ${pkgs.st}/bin/st
   '';
+
+  DmenuColors = pkgs.writeText "DmenuColors" ''-sb #af00af -nb #000000'';
 in {
   xsession.windowManager.i3 = {
     enable = true;
@@ -174,7 +175,7 @@ in {
         "${modifier}+Shift+i" = "move right";
         "${modifier}+f" = "layout toggle split";
         "${modifier}+p" = "exec i3-nagbar -t warning -m 'Do you want to exit i3?' -b 'Yes' 'i3-msg exit'";
-        "${modifier}+r" = "exec dmenu_run -sb \"#af00af\" -nb \"#000000\"";
+        "${modifier}+r" = "exec dmenu_run $(cat ${DmenuColors})";
         "${modifier}+q" = "exec librewolf";
         "${modifier}+y" = "mode resize";
         "${modifier}+Tab" = "workspace back_and_forth";
@@ -186,6 +187,10 @@ in {
         "${modifier}+F9" = "exec playerctl previous";
         "${modifier}+F10" = "exec playerctl play-pause";
         "${modifier}+F11" = "exec playerctl next";
+        "${modifier}+Shift+F9" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) previous";
+        "${modifier}+Shift+F10" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) play-pause";
+        "${modifier}+Shift+F11" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) next";
+        "${modifier}+semicolon" = "exec mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto \"$(${pkgs.xclip}/bin/xclip -o)\" --really-quiet";
         "XF86Calculator" = "exec ${clipQalc}";
         "Control+space" = "exec dunstctl close";
         "Control+." = "exec dunstctl history-pop";
