@@ -194,7 +194,7 @@ in {
         "XF86Calculator" = "exec ${clipQalc}";
         "Control+space" = "exec dunstctl close";
         "Control+." = "exec dunstctl history-pop";
-        "Print" = "exec maim -s --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
+        "Print" = "exec maim -su --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
         "XF86PowerOff" = "exec ${i3Lock}";
 
       };
