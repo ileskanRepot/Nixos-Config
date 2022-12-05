@@ -229,6 +229,14 @@ in {
       };
     };
     extraConfig = ''
+# class                 border  backgr. text    indicator child_border
+client.focused          #000000 #dd00dd #ffffff #2e9ef4   #285577
+client.focused_inactive #333333 #660066 #ffffff #484e50   #5f676a
+client.unfocused        #440044 #220022 #888888 #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+client.background       #ffffff
+
 default_border none
 bar {
   i3bar_command   i3bar -t
