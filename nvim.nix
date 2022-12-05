@@ -9,6 +9,8 @@
       nnoremap \ :set nu! rnu!<Return>
       nnoremap co :VimtexCompile<Return>
       nnoremap <c-Semicolon> :VimtexView<Return>
+      nnoremap <F5> :%!xxd<Return>
+      nnoremap <F6> :%!xxd -r<Return>
       highlight LineNr ctermfg=13 ctermbg=0
       highlight Search ctermfg=0 ctermbg=13
       highlight NonText ctermfg=5
