@@ -193,7 +193,7 @@ in {
         "${modifier}+semicolon" = "exec mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto \"$(${pkgs.xclip}/bin/xclip -o)\" --really-quiet";
         "XF86Calculator" = "exec ${clipQalc}";
         "Control+space" = "exec dunstctl close";
-        "Control+." = "exec dunstctl history-pop";
+        "Control+period" = "exec dunstctl history-pop";
         "Print" = "exec maim -su --format png /dev/stdout | xclip -selection clipboard -t image/png -i";
         "XF86PowerOff" = "exec ${i3Lock}";
 
@@ -202,7 +202,7 @@ in {
       bars = [ ];
       startup = [
         {
-          command = "${pkgs.feh}/bin/feh --bg-scale ~/Downloads/black.png";
+          command = "${pkgs.feh}/bin/feh --bg-scale ~/.config/nixpkgs/pingu.png";
           always = true;
           notification = false;
         }
