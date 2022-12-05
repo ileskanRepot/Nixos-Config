@@ -8,7 +8,7 @@
     ./nvim.nix
     ./chromium.nix
 #    ./firefox.nix
-#    ./dunst.nix
+    ./dunst.nix
     ./htop.nix
     ./mpv.nix
   ];

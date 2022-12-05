@@ -17,6 +17,7 @@
       set shiftwidth=2
       filetype plugin on
       let g:vimtex_view_general_viewer = 'zathura'      
+      autocmd filetype tex highlight MatchParen ctermbg=8
     '';
     withPython3 = true;
     plugins = with pkgs.vimPlugins; [

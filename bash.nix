@@ -3,6 +3,7 @@
   programs.bash = {
     enable = true;
     shellAliases = {
+      ncl = "nc -l";
       la = "ls -a";
       ll = "ls -lhA";
       pclip = "xclip -o -selection clipboard";
