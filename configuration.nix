@@ -23,6 +23,7 @@
 
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.kernelParams = [ "resume=/swapfile" "resume_offset=16711680" ];
   boot.loader.efi.canTouchEfiVariables = true;
 
   # Pick only one of the below networking options.
@@ -74,10 +75,11 @@
   # Enable the X11 windowing system.
   # services.xserver.enable = true;
 
+  programs.wireshark.enable = true;
   users.users.ileska = {
     isNormalUser = true;
     description = "Ileska";
-    extraGroups = [ "libvirtd" "networkmanager" "wheel" "adbusers" "video" "dialout" ];
+    extraGroups = [ "wireshark" "libvirtd" "networkmanager" "wheel" "adbusers" "video" "dialout" ];
   };
 
 
@@ -106,6 +108,7 @@
   environment.systemPackages = with pkgs; [
     # vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
     libreoffice
+    xorg.xmodmap
     wget jq python310Packages.yt-dlp
     tmux
     kitty
@@ -123,13 +126,14 @@
     keepassxc
     chromium
     xclip maim
-    inkscape
+    inkscape gimp
     dunst libnotify
     usbguard
     virt-manager
     toybox
     xdotool
     playerctl
+    neofetch 
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [

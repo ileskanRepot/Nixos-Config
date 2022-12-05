@@ -12,7 +12,6 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
   boot.extraModulePackages = [ ];
-  boot.kernelParams = [ "resume=/swapfile" "resume_offset=16711680" ];
   # boot.resumeDevice = "/dev/mapper/cryptroot";
 
 
