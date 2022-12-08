@@ -134,6 +134,7 @@
     xdotool
     playerctl
     neofetch 
+    tor-browser-bundle-bin
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
