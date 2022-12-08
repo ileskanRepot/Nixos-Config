@@ -6,9 +6,11 @@ let
     DUNST_STATUS=$(dunstctl is-paused)
     dunstctl set-paused true
     i3-msg "bar mode invisible"
-    ${pkgs.i3lock-color}/bin/i3lock-color -n -f \
-      -c 000000 \
-      --pass-power-keys
+    ${pkgs.i3lock-color}/bin/i3lock-color -k -n -f \
+      -i ~/.config/nixpkgs/pinguInvert.png \
+      --pass-power-keys \
+      --inside-color=00000000 --insidever-color=00000000 --insidewrong-color=00000000 \
+      --ring-color=ff00ffff
     i3-msg "bar mode hide"
     [ "$DUNST_STATUS" == "false" ] && dunstctl set-paused false
   '';
