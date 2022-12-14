@@ -9,6 +9,7 @@
     ./chromium.nix
 #    ./firefox.nix
     ./dunst.nix
+#    ./cursor.nix
     ./htop.nix
     ./mpv.nix
   ];

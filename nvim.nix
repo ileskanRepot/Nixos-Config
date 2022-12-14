@@ -20,6 +20,8 @@
       filetype plugin on
       let g:vimtex_view_general_viewer = 'zathura'      
       autocmd filetype tex highlight MatchParen ctermbg=8
+      autocmd filetype tex set colorcolumn=80
+      autocmd filetype txt set colorcolumn=80
     '';
     withPython3 = true;
     plugins = with pkgs.vimPlugins; [
