@@ -1,6 +1,7 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
+# Wkk
 
 { config, pkgs, ... }:
 
@@ -18,7 +19,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 14d";
+    options = "--delete-older-than 13d";
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -135,12 +136,14 @@
     playerctl
     neofetch 
     tor-browser-bundle-bin
+    prismlauncher
+    socat
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
         (fetchpatch {
           url = "https://st.suckless.org/patches/scrollback/st-scrollback-0.8.5.diff";
-          sha256 = "0mgsklws6jsrngcsy64zmr604qsdlpd5pqsa3pci7j3gn8im4zyw";
+          sha256 = "ZZAbrWyIaYRtw+nqvXKw8eXRWf0beGNJgoupRKsr2lc=";
         })
       ];
     }))
