@@ -18,6 +18,8 @@
       set tabstop=2
       set shiftwidth=2
       filetype plugin on
+      filetype plugin indent on
+      let g:python_recommended_style = 0
       let g:vimtex_view_general_viewer = 'zathura'      
       autocmd filetype tex highlight MatchParen ctermbg=8
       autocmd filetype tex set tw=80
