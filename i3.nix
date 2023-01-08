@@ -189,10 +189,17 @@ in {
         "${modifier}+F9" = "exec playerctl previous";
         "${modifier}+F10" = "exec playerctl play-pause";
         "${modifier}+F11" = "exec playerctl next";
+        "XF86AudioPrev" = "exec playerctl previous";
+        "XF86AudioPlay" = "exec playerctl play-pause";
+        "XF86AudioNext" = "exec playerctl next";
         "${modifier}+Shift+F9" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) previous";
         "${modifier}+Shift+F10" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) play-pause";
         "${modifier}+Shift+F11" = "exec playerctl -p $(playerctl --list-all | dmenu $(cat ${DmenuColors})) next";
         "${modifier}+semicolon" = "exec mpv --input-ipc-server=/tmp/mpvsocket --hwdec=auto \"$(${pkgs.xclip}/bin/xclip -o)\" --really-quiet";
+        "${modifier}+bracketleft" = "exec --no-startup-id notify-send 'MUSIC' \"$(playerctl -a metadata --format '{{ uc(playerName) }} - {{ status }}: {{ title }}')\"";
+        "${modifier}+bracketright" = "exec --no-startup-id fullscreen disable; floating enable; resize set 480 270; sticky enable; move window to position 0 0";
+        "${modifier}+ctrl+h" = "move workspace to output left";
+        "${modifier}+ctrl+i" = "move workspace to output right";
         "XF86Calculator" = "exec ${clipQalc}";
         "Control+comma" = "exec dunstctl close";
         "Control+period" = "exec dunstctl history-pop";
@@ -203,11 +210,6 @@ in {
       # Bar is off cause I didn't know how to color my bar in nix. Bar is defined in extraConfig
       bars = [ ];
       startup = [
-        {
-          command = "${pkgs.feh}/bin/feh --bg-scale ~/.config/nixpkgs/pingu.png";
-          always = true;
-          notification = false;
-        }
         {
           command = "${pkgs.alsa-utils}/bin/amixer set Master 0%";
         }
@@ -242,7 +244,7 @@ client.background       #ffffff
 default_border none
 bar {
   i3bar_command   i3bar -t
-  status_command  i3status
+  status_command  i3status-rs ~/.config/i3status-rust/config-top.toml
   position        top
   mode            hide
   colors {
