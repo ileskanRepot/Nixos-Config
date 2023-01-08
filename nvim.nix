@@ -1,3 +1,4 @@
+# https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
 { config, pkgs, ...}:
 {
   programs.neovim = {
@@ -24,6 +25,7 @@
       autocmd filetype tex highlight MatchParen ctermbg=8
       autocmd filetype tex set tw=80
       autocmd filetype txt set tw=80
+      autocmd filetype tex set colorcolumn=80
     '';
     withPython3 = true;
     plugins = with pkgs.vimPlugins; [
