@@ -6,10 +6,12 @@
     ./bash.nix
 #    ./vim.nix
     ./nvim.nix
+#    ./astroNvim.nix
     ./chromium.nix
 #    ./firefox.nix
     ./dunst.nix
 #    ./cursor.nix
+    ./i3rust.nix
     ./htop.nix
     ./mpv.nix
   ];
