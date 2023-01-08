@@ -1,7 +1,6 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-# Wkk
 
 { config, pkgs, ... }:
 
@@ -19,7 +18,7 @@
   nix.gc = {
     automatic = true;
     dates = "weekly";
-    options = "--delete-older-than 13d";
+    options = "--delete-older-than 14d";
   };
 
   # Use the systemd-boot EFI boot loader.
@@ -138,6 +137,7 @@
     tor-browser-bundle-bin
     prismlauncher
     socat
+    nmap
     (st.overrideAttrs (oldAttrs: rec {
       buildInputs = oldAttrs.buildInputs ++ [ harfbuzz ];
       patches = [
@@ -196,7 +196,7 @@
         enable = true;
         extraPackages = with pkgs; [
           dmenu 
-          i3status
+          i3status-rust
           i3lock-color
         ];
       };
