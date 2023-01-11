@@ -14,6 +14,8 @@
     ./i3rust.nix
     ./htop.nix
     ./mpv.nix
+#    ./vscodium.nix
+    ./vscode.nix
   ];
   home.sessionVariables = {
     EDITOR = "vim";
@@ -28,4 +30,6 @@
       "application/pdf" = ["zathura.desktop"];
     };
   };
+  # Temporaly for C course
+  nixpkgs.config.allowUnfree = true;
 }

@@ -134,6 +134,7 @@
     xdotool
     playerctl
     neofetch 
+    gcc gdb gnumake
     tor-browser-bundle-bin
     prismlauncher
     socat

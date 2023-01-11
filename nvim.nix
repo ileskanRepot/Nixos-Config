@@ -20,17 +20,22 @@
       set shiftwidth=2
       filetype plugin on
       filetype plugin indent on
+
       let g:python_recommended_style = 0
       let g:vimtex_view_general_viewer = 'zathura'      
+
       autocmd filetype tex highlight MatchParen ctermbg=8
       autocmd filetype tex set tw=80
       autocmd filetype txt set tw=80
       autocmd filetype tex set colorcolumn=80
+      let mapleader = ","
+      let g:vimspector_enable_mappings = 'HUMAN'
     '';
     withPython3 = true;
     plugins = with pkgs.vimPlugins; [
       vim-nix
       vimtex
+      vimspector
     ];
   };
 }
