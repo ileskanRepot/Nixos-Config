@@ -4,12 +4,20 @@
     enable = true;
     bars = {
       top = {
+        # theme = "plain";
+        # icons = "awesome6";
         blocks = [
          {
            block = "battery";
            device = "BAT0";
            interval = 1;
            format = "{percentage}";
+         }
+         {
+           block = "custom";
+           interval = 60;
+           command = "echo \"Phone $(qdbus org.kde.kdeconnect /modules/kdeconnect/devices/$(kdeconnect-cli -a --id-only)/battery org.kde.kdeconnect.device.battery.charge)\"%";
+           # format = "{command}";
          }
          {
            alert = 10.0;
