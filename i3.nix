@@ -173,8 +173,8 @@ in {
 
       keybindings = lib.mkOptionDefault {
         "XF86AudioMute" = "exec amixer set Master toggle";
-        "XF86AudioLowerVolume" = "exec amixer set Master 1%-";
-        "XF86AudioRaiseVolume" = "exec amixer set Master 1%+";
+        "XF86AudioLowerVolume" = "exec amixer sset 'Master' 3%-";
+        "XF86AudioRaiseVolume" = "exec amixer sset 'Master' 3%+";
         "XF86MonBrightnessDown" = "exec light -T 0.9";
         "XF86MonBrightnessUp" = "exec light -T 1.1";
         "${modifier}+BackSpace" = "exec /run/current-system/sw/bin/st";

@@ -3,10 +3,10 @@
   imports = [
     (builtins.fetchTarball {
       # Pick a release version you are interested in and set its hash, e.g.
-      url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/archive/nixos-23.05/nixos-mailserver-nixos-23.05.tar.gz";
+      url = "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/archive/master/nixos-mailserver-master.tar.gz";
       # To get the sha256 of the nixos-mailserver tarball, we can use the nix-prefetch-url command:
       # release="nixos-23.05"; nix-prefetch-url "https://gitlab.com/simple-nixos-mailserver/nixos-mailserver/-/archive/${release}/nixos-mailserver-${release}.tar.gz" --unpack
-      sha256 = "1ngil2shzkf61qxiqw11awyl81cr7ks2kv3r3k243zz7v2xakm5c";
+      sha256 = "1j0r52ij5pw8b8wc5xz1bmm5idwkmsnwpla6smz8gypcjls860ma";
     })
   ];
 
@@ -22,7 +22,7 @@
   # hardware.bumblebee.enable = true;
   services.postgresql = {
     enable = true;
-    ensureDatabases = [ "ileska" "keycloak" ];
+    ensureDatabases = [ "ileska" "keycloak" "jobsDb" ];
     enableTCPIP = true;
     authentication = pkgs.lib.mkOverride 10 ''
       #type database  DBuser  auth-method
@@ -40,8 +40,7 @@
     virtualHosts."ileska.fi" = {
       forceSSL = true;
       enableACME = true;
-      locations."/".proxyPass = "http://0.0.0.0:5173/";
-      locations."/api".proxyPass = "http://0.0.0.0:5170/api";
+      root = "/var/www/ileska.fi";
       default = true;
     };
     virtualHosts."music.ileska.fi" = {
@@ -57,6 +56,8 @@
       locations."/api".proxyPass = "http://0.0.0.0:8000/api";
     };
     virtualHosts."matrix.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
       locations."/".proxyPass = "http://0.0.0.0:8008/";
       locations."/_synapse/admin".index = "404";
     };
@@ -64,11 +65,6 @@
       forceSSL = true;
       enableACME = true;
       locations."/".proxyPass = "http://0.0.0.0:8765/";
-    };
-    virtualHosts."download.ileska.fi" = {
-      forceSSL = true;
-      enableACME = true;
-      locations."/".proxyPass = "http://0.0.0.0:8080/";
     };
     virtualHosts."wsd.ileska.fi" = {
       forceSSL = true;
@@ -95,6 +91,18 @@
       forceSSL = true;
       enableACME = true;
       locations."/".proxyPass = "http://0.0.0.0:4000/";
+      # locations."/".tryFiles = "/home/ileska/.bashrc";
+    };
+    virtualHosts."links.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://0.0.0.0:4010/";
+      # locations."/".tryFiles = "/home/ileska/.bashrc";
+    };
+    virtualHosts."jobs.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://0.0.0.0:4001/";
       # locations."/".tryFiles = "/home/ileska/.bashrc";
     };
     virtualHosts."auth.ileska.fi" = {
@@ -133,14 +141,43 @@
       root = "/var/www/niilo.ileska.fi";
       # locations."/".tryFiles = "/home/ileska/.bashrc";
     };
+    virtualHosts."docs.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      root = "/var/www/docs.ileska.fi";
+      # locations."/".tryFiles = "/home/ileska/.bashrc";
+    };
+    virtualHosts."ssh.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://0.0.0.0:5173/";
+      locations."/api".proxyPass = "http://0.0.0.0:8000/api";
+    };
+
+    virtualHosts."pass.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://0.0.0.0:9001/";
+    };
+
+    virtualHosts."files.ileska.fi" = {
+      addSSL = true;
+      enableACME = true;
+      root = "/var/www/files.ileska.fi";
+      locations."/".extraConfig = "autoindex on;";
+    };
+    /* virtualHosts."asWebTest.ileska.fi" = {
+      forceSSL = true;
+      enableACME = true;
+      locations."/".proxyPass = "http://192.168.0.43:8000/";
+    }; */
   };
 
-/*
   services.matrix-synapse = {
     enable = true;
     settings = {
       server_name = "matrix.ileska.fi";
-      registration_shared_secret ="xFfvbXgpwJ0fkFPOq8y05FDRly1RfYkkJnrYx1SyuIWoyxTXuIiqO7SQq2ivWMYX";
+      registration_shared_secret ="My Secret PRKL";
       database_type = "psycopg2";
       database_args = {
         database = "matrix-synapse";
@@ -151,7 +188,6 @@
     # registration_shared_secret = "kt0dce3HSg7bL8VAO1fWdOwL5A7jLmKY5nzPJ5KcFD6hKx4mEGC2pyKq7UdJHkiW";
     };
   };
-*/
 
   networking.nat = {
     enable = true;
@@ -179,19 +215,27 @@
     certificateScheme = "acme-nginx";
 
     loginAccounts = {
+      # nix-shell -p mkpasswd --run 'mkpasswd -sm bcrypt'
       "ileska@ileska.fi" = {
-        hashedPassword = "$6$WI2KjBW183WtKuQH$FnHV6SGwmqyw5ldkXDf7SaG3BZfM76iAC43FMOuljejQZz9uM9Rsodwfzfox6MwFy669fagfPDAF98vc30Lza0";
+        hashedPassword = "My Secrter PRKL";
         aliases = ["me@ileska.fi" "akseli@ileska.fi"];
+        catchAll = ["ileska.fi"];
+      };
+      "jobs@ileska.fi" = {
+        hashedPassword = "My Secrter PRKL";
       };
     };
     virusScanning = false;
   };
   
+ 
+  /*
   services.keycloak = {
     enable = true;
     settings = {
       hostname = "auth.ileska.fi";
-      hostname-strict-backchannel = true;
+      # hostname-strict-backchannel = true;
+      hostname-backchannel-dynamic = true;
       hostname-strict = false;
       hostname-strict-https = false;
       proxy = "edge";
@@ -218,4 +262,6 @@
     # sslCertificate = "/var/certs/psw/auth.crt";
     # sslCertificateKey = "/var/certs/psw/auth.key";
    };
+   */
+
 }

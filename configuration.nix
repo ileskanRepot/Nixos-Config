@@ -52,6 +52,20 @@
       appendNameservers = [ "1.1.1.1" "8.8.8.8" "1.0.0.1" ];
     wifi.macAddress = "stable";
     };
+    # wg-quick.interfaces = {
+      # wg0 = {
+        # address = [ "192.168.200.5" ];
+        # dns = [ "1.1.1.1" ];
+        # privateKeyFile = "/home/ileska/.psw/wg/privatekey";
+        # peers = [
+          # {
+            # publicKey = "VN7hc7orSDb5+0mss+LnLifIAetefrS6QBdJxXXPcVM=";
+            # allowedIPs = [ "0.0.0.0/0" ];
+            # endpoint = "home.motsgar.fi:51820";
+          # }
+        # ];
+      # };
+    # };
   };
 
   # Set your time zone.
@@ -109,6 +123,7 @@
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    qt6.qttools
     thunderbird
     mailutils
     vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
@@ -188,10 +203,15 @@
       '';
     };
 
+    displayManager = {
+      # sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 94 = Escape'";
+      defaultSession = "none+i3";
+    };
+    libinput.enable = true;
     xserver = {
       enable = true; 
-      layout = "us";
-      xkbVariant = "colemak";
+      xkb.layout = "us";
+      xkb.variant = "colemak";
 
       videoDrivers = [ "modesettings" ];
       deviceSection = ''
@@ -200,7 +220,6 @@
       '';
 
 
-      libinput.enable = true;
       autoRepeatDelay = 250;
       autoRepeatInterval = 40;
       desktopManager = {
@@ -209,7 +228,7 @@
 
       displayManager = {
         sessionCommands = "${pkgs.xorg.xmodmap}/bin/xmodmap -e 'keycode 94 = Escape'";
-        defaultSession = "none+i3";
+        # defaultSession = "none+i3";
       };
 
       windowManager.i3 = {
@@ -234,9 +253,7 @@
     usbguard = {
       enable = false;
       rules = ''
-        allow id 0951:1666 serial "60A44C426695B2307625AF6E" name "DataTraveler 3.0" hash "G9dYep3+lK68Q3EkjwxaBOXk+YUi7z822jtOfviEgoQ=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o=" via-port "1-3" with-interface 08:06:50 with-connect-type "hotplug"
-	allow id 2341:0043 serial "5573132383635121A171" name "" hash "uLEqY4iSESGM/vpI/bijPP41IQAr5wqnrOoAV0IWL68=" parent-hash "jEP/6WzviqdJ5VSeTUY8PatCNBKeaREvo2OqdplND/o=" via-port "1-3" with-interface { 02:02:01 0a:00:00 } with-connect-type "hotplug"
-
+  My rules
       '';
     };
     gvfs.enable = true;
@@ -251,6 +268,18 @@
   virtualisation.libvirtd.enable = true;
   virtualisation.docker.enable = true;
   programs.dconf.enable = true;
+
+  fonts.packages = with pkgs; [
+    noto-fonts
+    noto-fonts-emoji
+    liberation_ttf
+    fira-code
+    fira-code-symbols
+    mplus-outline-fonts.githubRelease
+    dina-font
+    proggyfonts
+    font-awesome
+  ];
 
   # Copy the NixOS configuration file and link it from the resulting system
   # (/run/current-system/configuration.nix). This is useful in case you
