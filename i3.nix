@@ -20,7 +20,7 @@ let
     dunstctl set-paused true
     i3-msg "bar mode invisible"
     ${pkgs.i3lock-color}/bin/i3lock-color -k -n -f \
-      -i ~/.config/nixpkgs/pinguInvert.png \
+      -i ~/.config/home-manager/pinguInvert.png \
       --pass-power-keys \
       --inside-color=00000000 --insidever-color=00000000 --insidewrong-color=00000000 \
       --ring-color=ff00ffff
