@@ -39,6 +39,7 @@
       vim-nix
       vimtex
       vimspector
+      semshi
     ];
   };
 }
